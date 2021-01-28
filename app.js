@@ -1,9 +1,12 @@
 'use strict'
 
+// 1. check if products from storage is null, if not null, then use the results of that instead of making new objects. If null, call a function that makes all the new products, otherwise we're going to use our results instead of those objects. ***may need to do a for loop that passes each item through the new product image constructor again.
+
 var Images = [];
 var Indexes = [];
 var TotalClicks = 0;
 
+// constructor function, organize the coins/data
 function ProductImage(image, name) {
   this.timesClicked = 0;
   this.timesShown= 0;
@@ -11,11 +14,34 @@ function ProductImage(image, name) {
   this.name = name; 
 
 ProductImage.allImages.push(this);
-
 }
 
 ProductImage.allImages = [];
 
+
+function getMyTreasureFromStorage() {
+  var productsFromStorage = localStorage.getItem('productArray');
+  console.log(productsFromStorage);
+  if (productsFromStorage === null){
+    return null;
+  }
+  var parsedstoredTreasure = JSON.parse(productsFromStorage);
+  return parsedstoredTreasure;
+}
+
+var storageResults = getMyTreasureFromStorage();
+console.log(storageResults, 'storage-results');
+if (storageResults === null) {
+  // here I'm going to call the function that makes all of my products
+  makeProducts();
+}
+else {
+  // my storage results are going to be ProductImage.allImages.array 
+  ProductImage.allImages = storageResults 
+}
+
+function makeProducts() {
+//here I am creating all my products
 new ProductImage('assets/bag.jpg', 'bag');
 new ProductImage('assets/banana.jpg', 'banana');
 new ProductImage('assets/bathroom.jpg', 'bathroom');
@@ -35,25 +61,32 @@ new ProductImage('assets/tauntaun.jpg', 'tauntaun');
 new ProductImage('assets/unicorn.jpg', 'unicorn');
 new ProductImage('assets/usb.gif', 'usb');
 new ProductImage('assets/water-can.jpg', 'water-can');
-new ProductImage('assets/wine-glass.jpg');
+new ProductImage('assets/wine-glass.jpg', 'wine-glass');
 console.log(ProductImage.allImages);
+}
 
 var productContainer = document.getElementById('product-container');
 var leftImageDOM = document.getElementById('left-image');
 var centerImageDOM = document.getElementById('center-image');
 var rightImageDOM = document.getElementById('right-image');
 
-function generateRandomProducts() {
 
-  for (var i = 0; i < 3; i++) {
-    var randomNumber = Math.floor(Math.random() * ProductImage.allImages.length);
-    while (Indexes.includes(randomNumber)){
-      randomNumber = Math.floor(Math.random() * ProductImage.allImages.length);
-    }
-    Images[i] = ProductImage.allImages[randomNumber]
-    // console.log(randomNumber)
+function generateRandomProducts(){
+  var leftIndex = Math.floor(Math.random() * ProductImage.allImages.length);
+  var middleIndex = Math.floor(Math.random() * ProductImage.allImages.length);
+  var rightIndex = Math.floor(Math.random() * ProductImage.allImages.length);
+
+  while (rightIndex === leftIndex){
+    rightIndex = Math.floor(Math.random() * ProductImage.length);
   }
-  return Images; 
+  while( middleIndex === rightIndex || middleIndex === leftIndex){
+    middleIndex  = Math.floor(Math.random() * ProductImage.allImages.length);
+  }
+  var leftImage = ProductImage.allImages[leftIndex];
+  var middleImage = ProductImage.allImages[middleIndex];
+  var rightImage = ProductImage.allImages[rightIndex];
+  
+return [leftImage, middleImage, rightImage];
 }
 
 
@@ -97,6 +130,8 @@ function addClickCount(event) {
     productContainer.removeEventListener('click', addClickCount);
     generateData();
     generateChart();
+    let productsToBeStored = JSON.stringify(ProductImage.allImages)
+    localStorage.setItem('productArray', productsToBeStored);
   }
 
   var newProducts = generateRandomProducts();
@@ -275,3 +310,37 @@ var myChart = new Chart(ctx, {
     }
 });
 }
+
+
+//started 1/27/2021
+
+
+// user visits webpage- do I currently have products in local storage? If local storage is emtpy return value of variable is null 
+//if no, then create all products array--- no, returned null
+//do stuff with product array
+
+//if yes, we have product array, then let product array be what you have in local storage
+
+//1. generate results
+//2. generate charts
+//3. store current product array in local storage
+
+
+// ////Below is setting local storage
+// let string = JSON.stringify(someArray)
+// localStorage.setItem('anyKey', string)
+// //Below is getting it out of local storage
+// let stringReturn = localStorage.getItem('anyKey')
+// let parsedSomeArray = JSON.parse(stringReturn)
+
+// function storeObject(obj) {
+//   var stringify = JSON.stringify(obj);
+//   localStorage.setItem('productArray', stringify);
+
+// }
+
+// function fetchObject(key) {
+//   var stringify = localStorage.getItem(key);
+//   return JSON.parse(stringify);
+// }
+
