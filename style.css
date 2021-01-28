@@ -1,0 +1,17 @@
+img  {
+  margin: o auto;
+  width: 250px;
+  border-radius: 20px;
+
+}
+
+input[type=submit] {
+  margin: 0 auto;
+  display: block;
+  border: 2px solid darkgrey;
+  padding: .2em .4em;
+  border-radius: .2em;
+  background-color: pink;
+  transition: 1s;
+
+}
