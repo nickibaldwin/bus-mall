@@ -1,5 +1,31 @@
+body {
+  background-color: darkgrey;
+  margin: auto;
+  width: 960px;
+}
+
+h1 {
+  font-size: 60px;
+  text-align: center;
+  font-family: 'Courier New', Courier, monospace;
+}
+
+h3 {
+  font-size: 30px;
+  text-align: center;
+  margin-top: 30px;
+  font-family: 'Courier New', Courier, monospace;
+}
+
+#product-container {
+  display: flex;
+  width: 100%;
+  margin-top: 60px;
+  margin-bottom: 30px;
+}
 img  {
-  margin: o auto;
+  margin: auto;
+  justify-content: center;
   width: 250px;
   border-radius: 20px;
 
